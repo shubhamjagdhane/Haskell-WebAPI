@@ -9,11 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        cabal: ["3.2"]
-        ghc:
-          - "8.10.4"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-haskell@v1
@@ -32,13 +27,11 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
           cabal update
-          cabal build all --enable-tests --enable-benchmarks --write-ghc-environment-files=always --project-file cabal.${{ matrix.ghc }}.project --only-dependencies
+          cabal build
       - name: Build
-        run: |
-          cabal build all --enable-tests --enable-benchmarks --write-ghc-environment-files=always --project-file cabal.${{ matrix.ghc }}.project
-      - name: Test
-        run: |
-          cabal test all --enable-tests  --project-file cabal.${{ matrix.ghc }}.project
+        run: cabal build
+      - name: Run tests
+        run: cabal test all
