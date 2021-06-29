@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  build:
+  stack:
     name: stack / ghc ${{ matrix.ghc }}
     runs-on: ubuntu-latest
     strategy:
