@@ -8,20 +8,15 @@ on:
 
 jobs:
   stack:
-    name: stack / ghc ${{ matrix.ghc }}
+    name: Haskell WebAPI
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        stack: ["2.7.1"]
-        ghc: ["8.10.4"]
-
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-haskell@v1.1
         with:
           ghc-version: "8.10.4" # Exact version of ghc to use
           enable-stack: true
-          stack-version: "latest"
+          stack-version: "2.7.1"
 
       - name: Install dependencies
         run: |
