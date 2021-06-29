@@ -2,37 +2,37 @@ name: Haskell CI
 
 on:
   push:
-    branches: [master, production]
+    branches: [master]
   pull_request:
     branches: [master]
 
 jobs:
-  runhaskell:
-    name: Haskell WebAPI
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-haskell@v1.1
+      - uses: actions/setup-haskell@v1
         with:
-          ghc-version: "8.10.4" # Exact version of ghc to use
-          enable-stack: true
-          stack-version: "2.7.1"
+          ghc-version: "8.10.4"
+          cabal-version: "3.2"
 
       - name: Cache
         uses: actions/cache@v1
         env:
-          cache-name: cache-stack
+          cache-name: cache-cabal
         with:
-          path: ~/.stack
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.stack') }}-${{ hashFiles('**/stack.project') }}
+          path: ~/.cabal
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cabal') }}-${{ hashFiles('**/cabal.project') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install dependencies
         run: |
-          stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks --only-dependencies
+          cabal update
+          cabal build --only-dependencies --enable-tests --enable-benchmarks
       - name: Build
-        run: stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks
+        run: cabal build --enable-tests --enable-benchmarks all
       - name: Run tests
-        run: stack test --system-ghc
+        run: cabal test all
