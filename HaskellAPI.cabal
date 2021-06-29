@@ -18,10 +18,18 @@ library
       Lib
   other-modules:
       Paths_HaskellAPI
+    , User
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , text
+    , webapi
+    , webapi-contract
+    , aeson
+    , wai
+    , wai-extra
+    , warp
  
   default-language: Haskell2010
 
@@ -35,7 +43,6 @@ executable HaskellAPI-exe
   build-depends:
       base >=4.7 && <5
     , HaskellAPI
-    , webapi
 
   default-language: Haskell2010
 
