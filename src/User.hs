@@ -44,19 +44,19 @@ data UserToken =
   } deriving (Show, Eq, Generic)                             
 
 instance ApiContract MyApiService POST User where
-  type FormParam POST User = UserData -- request param
+  -- type FormParam POST User = UserData
+  type RequestBody POST User = '[UserData]-- request param  
   type ApiOut    POST User = UserToken -- response param
 
 instance ApiContract MyApiService GET UserId where
   type ApiOut GET UserId = UserData -- response param
 
-
 instance FromJSON UserData
 instance ToJSON   UserData
-instance FromParam 'FormParam UserData
 
 instance FromJSON UserToken
 instance ToJSON   UserToken
+-- instance FromParam 'FormParam UserData
 
 -- web server implementation
 
@@ -68,7 +68,7 @@ instance WebApiServer MyApiServiceImpl where
 
 instance ApiHandler MyApiServiceImpl POST User where
   handler _ req = do
-    let _userInfo = formParam req
+    let _userInfo = requestBody req
     respond (UserToken "Foo" "Bar")
 
 instance ApiHandler MyApiServiceImpl GET UserId where
@@ -87,6 +87,9 @@ GET METHOD:
 curl http://localhost:8000/user/1
 
 POST METHOD
-curl -H "Content-Type: application/x-www-form-urlencoded" -d 'age=30&address=nazareth&name=Brian' http://localhost:8000/user
+curl -H "Content-Type: application/x-www-form-urlencoded" -d 'age=24&address=Pune&name=Shubham' http://localhost:8000/user
+
+POST METHOD => JSON input
+curl -H "Content-Type: application/json" -d '{"age":24, "address": "Pune", "name":"Shubham"}' http://localhost:8000/user
 
 -}
