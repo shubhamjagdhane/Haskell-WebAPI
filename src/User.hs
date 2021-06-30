@@ -23,19 +23,25 @@ type UserId = "user":/Int
 
 instance WebApi MyApiService where
   -- Route <Method>  <Route Name>
-   type Apis MyApiService = '[ Route '[POST]        User
-                             , Route '[GET]         UserId
-                             ]
+   type Apis MyApiService = 
+     '[ 
+        Route '[POST] User
+      , Route '[GET]  UserId
+      ]
 
 -- Our user type
-data UserData = UserData { age     :: Int
-                         , address :: Text
-                         , name    :: Text
-                         } deriving (Show, Eq, Generic)
+data UserData = 
+  UserData { 
+      age     :: Int
+    , address :: Text
+    , name    :: Text
+  } deriving (Show, Eq, Generic)
 
-data UserToken = UserToken { userId :: Text
-                          , token :: Text
-                          } deriving (Show, Eq, Generic)                             
+data UserToken = 
+  UserToken { 
+    userId :: Text
+  , token :: Text
+  } deriving (Show, Eq, Generic)                             
 
 instance ApiContract MyApiService POST User where
   type FormParam POST User = UserData -- request param
@@ -49,8 +55,6 @@ instance FromJSON UserData
 instance ToJSON   UserData
 instance FromParam 'FormParam UserData
 
-{--We dont need a FromParam instance since UserToken according
- to our example is not sent us form params or query params -}
 instance FromJSON UserToken
 instance ToJSON   UserToken
 
